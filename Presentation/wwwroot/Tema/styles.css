@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Custom CSS variables and styles complementing Tailwind v4 */
+:root {
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --transition-premium: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Premium Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.4)); }
+  50% { opacity: 0.9; filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.7)); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: rgba(22, 29, 48, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.light .glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.glass-nav {
+  background: rgba(11, 15, 25, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.light .glass-nav {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Ticket Styling with cutouts */
+.ticket-container {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));
+}
+
+.dark .ticket-container {
+  filter: drop-shadow(0 25px 30px rgba(0, 0, 0, 0.4));
+}
+
+.ticket-card {
+  background: radial-gradient(circle at left bottom, transparent 14px, #ffffff 15px) left top,
+              radial-gradient(circle at right bottom, transparent 14px, #ffffff 15px) right top;
+  background-size: 51% 100%;
+  background-repeat: no-repeat;
+}
+
+.dark .ticket-card {
+  background: radial-gradient(circle at left bottom, transparent 14px, #161D30 15px) left top,
+              radial-gradient(circle at right bottom, transparent 14px, #161D30 15px) right top;
+  background-size: 51% 100%;
+  background-repeat: no-repeat;
+}
+
+.ticket-stub {
+  background: radial-gradient(circle at left top, transparent 14px, #ffffff 15px) left top,
+              radial-gradient(circle at right top, transparent 14px, #ffffff 15px) right top;
+  background-size: 51% 100%;
+  background-repeat: no-repeat;
+  border-top: 2px dashed rgba(0, 0, 0, 0.08);
+}
+
+.dark .ticket-stub {
+  background: radial-gradient(circle at left top, transparent 14px, #161D30 15px) left top,
+              radial-gradient(circle at right top, transparent 14px, #161D30 15px) right top;
+  background-size: 51% 100%;
+  background-repeat: no-repeat;
+  border-top: 2px dashed rgba(255, 255, 255, 0.1);
+}
+
+/* Premium Gradient Grids and Shadows */
+.bg-mesh-dark {
+  background-color: #080B11;
+  background-image: 
+    radial-gradient(at 10% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 90% 10%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(236, 72, 153, 0.1) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+.bg-mesh-light {
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(at 10% 20%, rgba(99, 102, 241, 0.06) 0px, transparent 50%),
+    radial-gradient(at 90% 10%, rgba(168, 85, 247, 0.06) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(236, 72, 153, 0.04) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Transitions */
+.transition-premium {
+  transition: var(--transition-premium);
+}
+
+/* Hide Scrollbar helper class */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom UI enhancements */
+.glass-input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: var(--transition-premium);
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
+}
+
+.light .glass-input {
+  background: rgba(0, 0, 0, 0.01);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.light .glass-input:focus {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.08);
+}

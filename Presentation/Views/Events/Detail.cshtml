@@ -1,0 +1,159 @@
+@model EventDetailViewModel
+
+@{
+    ViewData["Title"] = "Ticketora | " + Model.Event.Title;
+    var badges = Model.Event.Badges.Split(',', StringSplitOptions.RemoveEmptyEntries);
+}
+
+<div id="mainWrapper" class="w-full min-h-screen bg-mesh-dark text-slate-100 flex flex-col transition-colors duration-300">
+    <header class="sticky top-0 z-40 glass-nav transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div onclick="window.location.href='/'" class="flex items-center gap-3 cursor-pointer group shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+            </svg>
+          </div>
+          <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent group-hover:from-indigo-300 group-hover:to-purple-300 transition-all duration-300">TICKETORA</span>
+        </div>
+
+        <nav class="flex items-center gap-4">
+          @if (User.Identity?.IsAuthenticated == true)
+          {
+              <div id="userNavActions" class="flex items-center gap-4 relative group">
+                <div id="navProfileTrigger" class="flex items-center gap-3 cursor-pointer p-1.5 pr-3 rounded-full hover:bg-white/5 transition-all duration-300 border border-transparent hover:border-white/5">
+                  <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-8 h-8 rounded-full object-cover border border-indigo-500/30">
+                  <span class="text-sm font-bold text-slate-300 group-hover:text-white hidden lg:inline">@(User.Identity.Name ?? "Hesabım")</span>
+                </div>
+                <div id="navProfileDropdown" class="absolute right-0 top-11 w-48 rounded-2xl glass-panel shadow-2xl border border-white/5 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 py-2">
+                  <button onclick="window.location.href='/Dashboard'" class="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:text-white hover:bg-white/5 flex items-center gap-2 cursor-pointer">Profil Paneli</button>
+                  <button onclick="window.location.href='/Dashboard/Tickets'" class="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:text-white hover:bg-white/5 flex items-center gap-2 cursor-pointer">Bilet Geçiş Kartlarım</button>
+                  <button onclick="window.location.href='/Dashboard/Settings'" class="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:text-white hover:bg-white/5 flex items-center gap-2 cursor-pointer">Hesap Ayarları</button>
+                  <hr class="border-white/5 my-1.5">
+                  <form asp-controller="Auth" asp-action="Logout" method="post" class="m-0">
+                    <button type="submit" class="w-full px-4 py-2.5 text-left text-sm text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 flex items-center gap-2 cursor-pointer">Çıkış Yap</button>
+                  </form>
+                </div>
+              </div>
+          }
+          else
+          {
+              <div id="guestNavActions" class="flex items-center gap-3">
+                <button onclick="window.location.href='/Auth'" class="px-5 py-2.5 rounded-full text-sm font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer">Giriş Yap</button>
+                <button onclick="window.location.href='/Auth'" class="px-5 py-2.5 rounded-full text-sm font-bold bg-indigo-500 hover:bg-indigo-600 transition-colors text-white cursor-pointer shadow-lg shadow-indigo-500/20">Cüzdan Oluştur</button>
+              </div>
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <section class="space-y-8 text-left fade-in-active">
+        <button onclick="window.location.href='/'" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer group">
+          <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          Etkinliklere Geri Dön
+        </button>
+
+        <div class="relative h-[250px] md:h-[400px] rounded-3xl overflow-hidden border border-white/5 shadow-2xl">
+          <img id="detailHeroBanner" src="@Model.Event.HeroImage" alt="@Model.Event.Title" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+          <div class="absolute bottom-6 left-6 right-6 md:bottom-12 md:left-12 md:right-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div class="space-y-3">
+              <span id="detailCategory" class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">@Model.Event.CategoryName</span>
+              <h1 id="detailTitle" class="text-2xl md:text-4xl font-extrabold text-white leading-tight">@Model.Event.Title</h1>
+              <p class="text-xs md:text-sm text-slate-300 font-medium">Düzenleyen: <span id="detailOrganizer" class="font-bold text-indigo-400">@Model.Event.Organizer</span></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2 space-y-8">
+            <div class="p-6 md:p-8 rounded-2xl glass-panel border border-white/5 space-y-6">
+              <h3 class="text-xl font-bold text-white border-b border-white/5 pb-4">Etkinlik Açıklaması</h3>
+              <p id="detailDesc" class="text-slate-400 text-sm md:text-base leading-relaxed font-sans">@Model.Event.Description</p>
+              <div class="pt-4 flex flex-wrap gap-2.5" id="detailTags">
+                @foreach (var badge in badges)
+                {
+                    <span class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-slate-300">@badge</span>
+                }
+              </div>
+            </div>
+
+            <div class="p-6 md:p-8 rounded-2xl glass-panel border border-white/5 space-y-6">
+              <h3 class="text-xl font-bold text-white border-b border-white/5 pb-4">Detaylar & Takvim</h3>
+              <div class="grid sm:grid-cols-2 gap-6">
+                <div class="flex gap-4">
+                  <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold text-slate-500 block">TARİH</span>
+                    <p id="detailDate" class="text-sm font-bold text-slate-200 mt-0.5">@Model.Event.Date.ToString("dd MMMM yyyy")</p>
+                  </div>
+                </div>
+                <div class="flex gap-4">
+                  <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold text-slate-500 block">SAAT BİLGİSİ</span>
+                    <p id="detailTime" class="text-sm font-bold text-slate-200 mt-0.5">@Model.Event.TimeRange</p>
+                  </div>
+                </div>
+                <div class="flex gap-4 sm:col-span-2">
+                  <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold text-slate-500 block">DETAYLI KONUM</span>
+                    <p id="detailLocation" class="text-sm font-bold text-slate-200 mt-0.5">@Model.Event.Location</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 md:p-8 rounded-2xl glass-panel border border-white/5 space-y-6">
+              <h3 class="text-xl font-bold text-white border-b border-white/5 pb-4">Sıkça Sorulan Sorular</h3>
+              <details class="group border-b border-white/5 pb-4" open>
+                <summary class="flex justify-between items-center font-bold text-slate-200 cursor-pointer list-none">
+                  Dijital biletlerime nasıl erişebilirim?
+                  <span class="transition group-open:rotate-185"><svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></span>
+                </summary>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">Satın alım işlemi başarıyla tamamlandıktan sonra, bilet kartınız doğrudan Ticketora Cüzdan panelinize eklenecektir.</p>
+              </details>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="sticky top-28 p-6 rounded-2xl glass-panel border border-white/5 space-y-6 shadow-2xl">
+              <div class="flex justify-between items-center">
+                <span class="text-sm font-bold text-slate-400">Bilet Fiyatı</span>
+                <span id="widgetPrice" class="text-2xl font-extrabold text-indigo-400">$@Model.Event.Price.ToString("0.00")</span>
+              </div>
+              <p class="text-xs text-slate-500 leading-relaxed font-sans">Ticketora işlemleri anında gerçekleşir. Tüm biletler dinamik giriş güvenlik kodlarıyla korunmaktadır.</p>
+              <hr class="border-white/5">
+              <ul class="space-y-3 text-sm">
+                <li class="flex items-center gap-2.5 text-slate-300 font-sans"><span class="text-emerald-500">✓</span> Anında cüzdan paneli erişimi</li>
+                <li class="flex items-center gap-2.5 text-slate-300 font-sans"><span class="text-emerald-500">✓</span> Yüksek çözünürlüklü barkod ve QR kod</li>
+                <li class="flex items-center gap-2.5 text-slate-300 font-sans"><span class="text-emerald-500">✓</span> Özelleştirilebilir katılımcı bilgileri</li>
+              </ul>
+              <button id="detailBookBtn" onclick="window.location.href='/Booking/Checkout/@Model.Event.Id'" class="w-full py-4 rounded-xl font-bold bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white transition-all cursor-pointer shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2">
+                Hemen Bilet Al
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mt-auto border-t border-white/5 py-8 bg-slate-950/40 text-center">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded-md bg-indigo-500/20 flex items-center justify-center"><span class="text-indigo-400 text-[10px] font-black">TK</span></div>
+          <span class="text-sm font-bold text-slate-400">Ticketora</span>
+        </div>
+        <p class="text-xs text-slate-500">© 2026 Ticketora A.Ş. Tüm hakları saklıdır.</p>
+      </div>
+    </footer>
+</div>

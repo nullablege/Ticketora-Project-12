@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  ticketora-db:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: ticketora-db
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=TicketoraPass123!
+    volumes:
+      - ticketora_db_data:/var/opt/mssql
+    networks:
+      - default
+
+  ticketora-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ticketora-web
+    restart: always
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=ticketora-db;Database=TicketoraDb;User Id=sa;Password=TicketoraPass123!;TrustServerCertificate=True;
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+      - ticketora-db
+    networks:
+      - default
+
+networks:
+  default:
+    name: kktcsatiyorumkiro_default
+    external: true
+
+volumes:
+  ticketora_db_data:
